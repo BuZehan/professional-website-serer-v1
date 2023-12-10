@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto }
+ from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -56,7 +57,7 @@ function UserRoles(username: string, password: string) {
           {
             path: 'home',
             name: 'home',
-            label: '首页',
+            label: '数据展示',
             icon: 's-home',
             url: 'Home.vue',
           },
@@ -84,6 +85,29 @@ function UserRoles(username: string, password: string) {
               },
             ],
           },
+          {
+            path: 'swiper',
+            name: 'swiper',
+            label: '首页轮播图管理',
+            icon: 'picture',
+            url: 'Swiper.vue',
+          },
+     
+          {
+            path: 'stu',
+            name: 'stu',
+            label: '校友管理',
+            icon: 'user',
+            url: 'Student.vue',
+          },
+          {
+            path: 'teacher',
+            name: 'teacher',
+            label: '教师管理',
+            icon: 'user',
+            url: 'Teacher.vue',
+          },
+     
         ],
         message: '获取成功',
       },

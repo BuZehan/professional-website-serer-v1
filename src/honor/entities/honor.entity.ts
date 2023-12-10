@@ -10,7 +10,7 @@ export class Honor {
   news_title: string;
 
   @Column({type:'text'})
-  news_content: string;
+  news_content: string; 
 
   @Column()
   release_time: string;

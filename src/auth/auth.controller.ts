@@ -35,19 +35,26 @@ export class AuthController {
   signin(@Request() req, @Body() dto: SigninUserDto) {
     //SigninUserDto 后端校验
     // console.log(dto,dto?.verification,this.code);
-    if (
-      this.code.toLocaleLowerCase() === dto?.verification?.toLocaleLowerCase()
-    ) {
-      try {
-        let { username, password } = dto;
-        return this.authService.signIn(username, password);
-      } catch (error) {
-        console.log('auth.controller.ts:', error);
+    try {
+      if (
+        this.code.toLocaleLowerCase() === dto?.verification?.toLocaleLowerCase()
+      ) {
+        try {
+          let { username, password } = dto;
+          return this.authService.signIn(username, password);
+        } catch (error) {
+          console.log('auth.controller.ts:', error);
+        }
+      } else {
+        return {
+          message: '验证码错误，请重试。',
+          code: 41,
+        };
       }
-    } else {
+    } catch (error) {
       return {
-        message: '验证码错误，请重试。',
-        code: 41,
+        code: 500,
+        error,
       };
     }
 

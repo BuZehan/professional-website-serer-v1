@@ -117,31 +117,37 @@ export class HonorService {
   async getNotificationList(pageData: any) {
     let { page, limit, type } = pageData;
     // 将 type 转换为数组，如果它不是数组类型
-    if (!Array.isArray(type)) {
-      type = [type];
+    try {
+      if (!Array.isArray(type)) {
+        type = [type];
+      }
+      let [results, total] = await this.honorRepository.findAndCount({
+        skip: (page - 1) * limit,
+        take: limit,
+        order: {
+          id: 'DESC',
+        },
+        relations: ['honorImage'],
+        where: type[0] ? { type: In(type) } : {},
+      });
+      return {
+        list: results,
+        count: results.length,
+        total,
+        next:
+          total > page * limit ? `/used?page=${page + 1}&limit=${limit}` : null,
+        prev: page > 1 ? `/used?page=${page - 1}&limit=${limit}` : null,
+        nextPage: +page + 1,
+        prevPage: +page - 1,
+        // @ts-ignore
+        imgArr: results.honorImage,
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        message: 'error',
+      };
     }
-    console.log(type);
-    let [results, total] = await this.honorRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      order: {
-        id: 'DESC',
-      },
-      relations: ['honorImage'],
-      where: type[0] ? { type: In(type) } : {},
-    });
-    return {
-      list: results,
-      count: results.length,
-      total,
-      next:
-        total > page * limit ? `/used?page=${page + 1}&limit=${limit}` : null,
-      prev: page > 1 ? `/used?page=${page - 1}&limit=${limit}` : null,
-      nextPage: +page + 1,
-      prevPage: +page - 1,
-      // @ts-ignore
-      imgArr: results.honorImage,
-    };
   }
   //TODO 删除证书
   async deleteNotification(id: any) {

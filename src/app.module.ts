@@ -14,13 +14,15 @@ import { NotificationImage } from './notification/entities/notificationImage.ent
 import { Notification } from './notification/entities/notification.entity';
 import { Honor } from './honor/entities/honor.entity';
 import { HonorImage } from './honor/entities/honorImage.entity';
+import { Swiper } from './swiper/entities/swiper.entity';
+import { SwiperImage } from './swiper/entities/swiperImage.entiy';
 //  模块
 import { NewsModule } from './news/news.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { NotificationModule } from './notification/notification.module';
 import { HonorModule } from './honor/honor.module';
-import { CorsMiddleware } from './middleware';
+import { SwiperModule } from './swiper/swiper.module';
 
 @Module({
   imports: [
@@ -33,7 +35,7 @@ import { CorsMiddleware } from './middleware';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql', // 数据库类型
-        entities: [News, User, Image, Notification, NotificationImage,Honor,HonorImage], // 数据表实体
+        entities: [News, User, Image, Notification, NotificationImage,Honor,HonorImage,Swiper,SwiperImage], // 数据表实体
         host: configService.get('DB_HOST', 'localhost'), // 主机，默认为localhost
         port: configService.get<number>('DB_PORT', 3306), // 端口号
         username: configService.get('DB_USER', 'root'), // 用户名
@@ -51,6 +53,7 @@ import { CorsMiddleware } from './middleware';
     AuthModule,
     NotificationModule,
     HonorModule,
+    SwiperModule,
   ],
   controllers: [AppController],
   providers: [AppService],
