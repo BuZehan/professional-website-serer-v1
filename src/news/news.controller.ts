@@ -13,73 +13,76 @@ import {
   UploadedFiles,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
-import { CreateNewsDto } from './dto/create-news.dto';
-import { UpdateNewsDto } from './dto/update-news.dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+
 @Controller('news')
 export class NewsController {
-  constructor(private readonly newsService: NewsService) {}
+  constructor(
+    private readonly newsService: NewsService,
+
+  ) {}
   // 上传文件（图片）
-  @Post('uoload')
+  @Post('upload')
   @UseInterceptors(FilesInterceptor('files', 9))
-  uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log('文件数据', files);
+  async createNewsImage(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body,
+  ) {
+    try {
+      // console.log(files);
+     return this.newsService.InsertImage(files);
+      
+    } catch (error) {
+      console.log('######Error', error);
+      return {
+        errno: 1, // 只要不等于 0 就行
+        message: '失败信息',
+      };
+    }
   }
   // 添加新闻
   @Post('add')
   @UseInterceptors(FilesInterceptor('files', 9))
   create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    // console.log(files,body);
-    let formData = JSON.parse(body.formData);
-    let news_title = formData['news_title'];
-    let news_content = formData['news_content'];
-    // console.log("表单数据",body,"文件",files);
-    let Images = files.map(
-      (item) => `${process.env.ADDRESS}news/${item.filename}`,
-    );
-    let fileName = files.map((item) => item.filename);
-    return this.newsService.addNews(
-      { news_title, news_content },
-      Images,
-      fileName,
-    );
+    // console.log(body, files);
+    if (body.editorData) {
+      // 富文本添加数据
+      let {editorData,title,imageList} = body
+      // console.log(body);
+      
+     return this.newsService.InsertEditorData(editorData,title,imageList);
+    } else {
+      // ElementUI添加数据
+     return this.ADD_NEWS(body)
+    }
   }
   // 编辑新闻
   @Post('editNews')
-  @UseInterceptors(FilesInterceptor('files', 9))
-  editNews(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    // console.log('表单数据', body, '文件', files);
-    let formData = JSON.parse(body.formData);
-    let news_title = formData['news_title'];
-    let news_content = formData['news_content'];
-    let images = formData['images'];
-    let id = formData['id'];
-    // console.log('前端数据：', { news_title, news_content, images, id },"文件:",files);
-    // 新增图片
-    let Images = files.map(
-      (item) => `${process.env.ADDRESS}news/${item.filename}`,
-    );
-    // 旧图片
-    let oldImages = images.map(path => path.url ? path.url : path)
-    return this.newsService.updateNews(
-      { news_title, news_content, images, id },
-      Images,oldImages
-    );
+  editNews( @Body() body) {
+    console.log(body);
+    let {id,title,content,imageList} = body
+    return this.newsService.updateNews(id,title,content,imageList)
   }
   // 获取所有新闻
   @Get('getNews')
   getNews(@Query() query) {
-    return this.newsService.getNewsList(query);
+    return this.newsService.getEditorData(query)
+    // return this.newsService.getNewsList(query);
   }
   // 删除新闻
   @Post('delNews')
   delNews(@Body() body) {
-    let {id} = body
-    return this.newsService.deleteNews(id)
+    let { id } = body;
+    return this.newsService.deleteNews(id);
   }
   // 获取所有新闻数据条数
   @Get('getNewsCount')
   getNewsCount() {
     return this.newsService.getNewsCount();
+  }
+
+  ADD_NEWS( body:any) {
+    let {editorData,title,imageList} = body
+    return this.newsService.InsertEditorData(editorData,title,imageList);
   }
 }

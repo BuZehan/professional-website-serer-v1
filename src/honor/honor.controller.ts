@@ -69,7 +69,6 @@ export class HonorController {
   @Get('getHonor')
   getNotification(@Query() query) {
     // console.log('获取证书',query);
-    
     return this.honor.getNotificationList(query);
   }
   // 删除新闻

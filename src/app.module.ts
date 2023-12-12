@@ -8,6 +8,7 @@ import { join } from 'path';
 import envConfig from '../config/env';
 // 👇存储库
 import { News } from './news/entities/news.entity';
+import { EditorData } from './news/entities/editorContent.entity';
 import { User } from './user/entities/user.entity';
 import { Image } from './news/entities/images.entiy';
 import { NotificationImage } from './notification/entities/notificationImage.entity';
@@ -16,6 +17,11 @@ import { Honor } from './honor/entities/honor.entity';
 import { HonorImage } from './honor/entities/honorImage.entity';
 import { Swiper } from './swiper/entities/swiper.entity';
 import { SwiperImage } from './swiper/entities/swiperImage.entiy';
+import { Student } from './student/entities/student.entity';
+import { StudentImage } from './student/entities/studentImage.entity';
+import { Teacher } from './teacher/entities/teacher.entity';
+import { TeacherImage } from './teacher/entities/teacherImage.entity';
+import { NewsImage } from './news/entities/editorImage.entity';
 //  模块
 import { NewsModule } from './news/news.module';
 import { UserModule } from './user/user.module';
@@ -23,6 +29,8 @@ import { AuthModule } from './auth/auth.module';
 import { NotificationModule } from './notification/notification.module';
 import { HonorModule } from './honor/honor.module';
 import { SwiperModule } from './swiper/swiper.module';
+import { StudentModule } from './student/student.module';
+import { TeacherModule } from './teacher/teacher.module';
 
 @Module({
   imports: [
@@ -35,7 +43,7 @@ import { SwiperModule } from './swiper/swiper.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql', // 数据库类型
-        entities: [News, User, Image, Notification, NotificationImage,Honor,HonorImage,Swiper,SwiperImage], // 数据表实体
+        entities: [News,EditorData, User, Image,NewsImage, Notification, NotificationImage,Honor,HonorImage,Swiper,SwiperImage,Student,StudentImage,Teacher,TeacherImage], // 数据表实体
         host: configService.get('DB_HOST', 'localhost'), // 主机，默认为localhost
         port: configService.get<number>('DB_PORT', 3306), // 端口号
         username: configService.get('DB_USER', 'root'), // 用户名
@@ -54,6 +62,8 @@ import { SwiperModule } from './swiper/swiper.module';
     NotificationModule,
     HonorModule,
     SwiperModule,
+    StudentModule,
+    TeacherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
