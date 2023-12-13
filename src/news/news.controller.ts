@@ -48,12 +48,13 @@ export class NewsController {
     if (body.editorData) {
       // 富文本添加数据
       let {editorData,title,imageList} = body
-      // console.log(body);
-      
+      console.log(body);
      return this.newsService.InsertEditorData(editorData,title,imageList);
-    } else {
-      // ElementUI添加数据
-     return this.ADD_NEWS(body)
+    }else{
+      return{
+        code:400,
+        message:'未携带参数'
+      }
     }
   }
   // 编辑新闻
@@ -81,8 +82,8 @@ export class NewsController {
     return this.newsService.getNewsCount();
   }
 
-  ADD_NEWS( body:any) {
-    let {editorData,title,imageList} = body
-    return this.newsService.InsertEditorData(editorData,title,imageList);
-  }
+  // ADD_NEWS( body:any) {
+  //   let {editorData,title,imageList} = body
+  //   return this.newsService.InsertEditorData(editorData,title,imageList);
+  // }
 }

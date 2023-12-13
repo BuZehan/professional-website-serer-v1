@@ -12,7 +12,7 @@ import { HonorImage } from './entities/honorImage.entity';
 @Module({
   imports:[TypeOrmModule.forFeature([Honor,HonorImage]),MulterModule.register({
     storage:diskStorage({
-      destination:join(__dirname,"../../public/news"),
+      destination:join(__dirname,"../../public/honor"),
       filename:(_,file,callback) => {
         const newUuid = uuidv4();
         const fileName = `${newUuid + extname(file.originalname)}`

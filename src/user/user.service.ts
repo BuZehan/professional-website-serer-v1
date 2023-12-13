@@ -85,13 +85,13 @@ function UserRoles(username: string, password: string) {
               },
             ],
           },
-          {
-            path: 'swiper',
-            name: 'swiper',
-            label: '首页轮播图管理',
-            icon: 'picture',
-            url: 'Swiper.vue',
-          },
+          // {
+          //   path: 'swiper',
+          //   name: 'swiper',
+          //   label: '首页轮播图管理',
+          //   icon: 'picture',
+          //   url: 'Swiper.vue',
+          // },
      
           {
             path: 'stu',

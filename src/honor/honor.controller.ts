@@ -34,7 +34,7 @@ export class HonorController {
     let type = formData['type'];
     console.log("表单数据",body,"文件",files);
     let Images = files.map(
-      (item) => `${process.env.ADDRESS}news/${item.filename}`,
+      (item) => `${process.env.ADDRESS}honor/${item.filename}`,
     );
     let fileName = files.map((item) => item.filename);
     return this.honor.addNotification(
@@ -47,21 +47,22 @@ export class HonorController {
   @Post('editHonor')
   @UseInterceptors(FilesInterceptor('files', 9))
   editNews(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    // console.log('表单数据', body, '文件', files);
+    console.log('表单数据', body, '文件', files);
     let formData = JSON.parse(body.formData);
     let news_title = formData['news_title'];
     let news_content = formData['news_content'];
     let images = formData['images'];
     let id = formData['id'];
+    let type = formData['type']
     // console.log('前端数据：', { news_title, news_content, images, id },"文件:",files);
     // 新增图片
     let Images = files.map(
-      (item) => `${process.env.ADDRESS}news/${item.filename}`,
+      (item) => `${process.env.ADDRESS}honor/${item.filename}`,
     );
     // 旧图片
     let oldImages = images.map(path => path.url ? path.url : path)
     return this.honor.updateNotification(
-      { news_title, news_content, images, id },
+      { news_title, news_content, images, id,type },
       Images,oldImages
     );
   }

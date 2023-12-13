@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import {StudentImage} from './studentImage.entity'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Student {
@@ -7,17 +6,17 @@ export class Student {
   id: number;
 
   @Column()
-  student_name: string;
+  title: string;
 
-  @Column({type:'text'})
-  student_desc: string; 
+  @Column({ type: 'text' })
+  content: string;
 
-  @Column()
+  @Column({ type: 'text' })
+  image_list: string;
+
+  @Column({default:0})
+  delete: number;
+
+  @Column({default:2023})
   release_time: string;
-
-  @Column()
-  grade: string;
-
-  @OneToMany(() => StudentImage, studentImage => studentImage.student, { cascade: true })
-  studentImage: StudentImage[];
 }

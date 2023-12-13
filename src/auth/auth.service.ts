@@ -9,7 +9,7 @@ export class AuthService {
 
   // 登录
   async signIn(username, pass):Promise<any> {
-    console.log(username,pass);
+    // console.log(username,pass);
     
     const user = await this.userService.findOne(username);
     // const user = await this.userService.findAll(username);

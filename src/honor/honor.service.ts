@@ -130,6 +130,8 @@ export class HonorService {
         relations: ['honorImage'],
         where: type[0] ? { type: In(type) } : {},
       });
+      // console.log('获取证书',results);
+      
       return {
         list: results,
         count: results.length,

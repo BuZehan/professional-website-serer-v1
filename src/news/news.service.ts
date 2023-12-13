@@ -26,59 +26,6 @@ export class NewsService {
     private newsImageRepository: Repository<NewsImage>,
   ) {}
 
-  // 添加单条新闻
-  async addNews({ news_title, news_content }, imageArr: any, fileName: any) {
-    let news = {
-      news_title,
-      news_content,
-      release_time: formatTimestamp() + '',
-      images_arr: JSON.stringify(fileName),
-    };
-    try {
-      await this.createNewsWithImages(news, imageArr);
-      return {
-        code: 200,
-        msg: '添加成功',
-      };
-    } catch (error) {
-      console.log('新闻添加失败', error);
-      // console.log(news);
-      return {
-        code: 400,
-        msg: '新闻添加失败',
-      };
-    }
-  }
-  // 获取所有新闻
-  async getNewsList(pageData: any) {
-    let { page, limit } = pageData;
-    // console.log(page, limit);
-
-    try {
-      let [results, total] = await this.newsRepository.findAndCount({
-        skip: (page - 1) * limit,
-        take: limit,
-        order: {
-          id: 'DESC',
-        },
-        relations: ['images'],
-      });
-      return {
-        list: results,
-        count: results.length,
-        total,
-        next:
-          total > page * limit ? `/used?page=${page + 1}&limit=${limit}` : null,
-        prev: page > 1 ? `/used?page=${page - 1}&limit=${limit}` : null,
-        nextPage: +page + 1,
-        prevPage: +page - 1,
-        // @ts-ignore
-        imgArr: results.images,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  }
   // 更新新闻数据
   async updateNews(id, title, content, imageList) {
     try {
@@ -115,37 +62,7 @@ export class NewsService {
       };
     }
   }
-  // 创建新闻联合创建图片
-  async createNewsWithImages(newsData, imageDataList) {
-    const news = this.newsRepository.create(newsData);
-    const images = imageDataList.map((imageData) => {
-      const image = new Image();
-      image.image_path = imageData;
-      // @ts-ignore
-      image.news = news;
-      image.delete = 0;
-      image.image_name = imageData
-        .substring(imageData.lastIndexOf('/') + 1, imageData.length)
-        .split('.')[0];
-      return image;
-    });
-
-    await this.newsRepository.save(news);
-    await this.imageRepository.save(images);
-    return {
-      code: 200,
-      message: 'success',
-    };
-  }
-  async getNewsWithImages(id) {
-    return this.newsRepository.find({
-      where: {
-        id,
-      },
-      relations: ['images'],
-    });
-  }
-  // 删除新闻及配图
+  // 删除新闻
   async deleteNews(id: any) {
     try {
       // 删除关联的图片数据
