@@ -30,7 +30,7 @@ export class StudentController {
     } catch (error) {
       console.log('######Error', error);
       return {
-        errno: 1, // 只要不等于 0 就行
+        error: 1, // 只要不等于 0 就行
         message: '失败信息',
       };
     }
@@ -39,7 +39,7 @@ export class StudentController {
   @Post('add')
   @UseInterceptors(FilesInterceptor('files', 9))
   create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    console.log(body, files);
+    // console.log(body, files);
     if (body.editorData) {
       // 富文本添加数据
       let { editorData, title, imageList } = body;
@@ -58,21 +58,20 @@ export class StudentController {
     // console.log('获取数据',query);
     return this.studentService.geStuList(query);
   }
-  //TODO 编辑
+  //TODO编辑
   @Post('editStu')
   editNews(@Body() body) {
-    console.log(body);
+    // console.log(body);
     let { id, title, content, imageList } = body;
     return this.studentService.updateNews(id, title, content, imageList);
   }
-  // 获取
-  //TODO 删除新闻
+  //TODO 删除
   @Post('delStu')
   delStu(@Body() body) {
     let { id } = body;
     return this.studentService.deleteStu(id);
   }
-  //TODO 获取所有新闻数据条数
+  //TODO 获取所有数据条数
   @Get('getAlumniCount')
   getStuCount() {
     return this.studentService.getStuCount();

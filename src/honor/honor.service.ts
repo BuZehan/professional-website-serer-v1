@@ -8,6 +8,7 @@ import { In, Repository } from 'typeorm';
 import { formatTimestamp } from 'src/utils';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
+const iconv = require('iconv-lite');
 @Injectable()
 export class HonorService {
   constructor(
@@ -21,15 +22,15 @@ export class HonorService {
 
   //TODO 添加证书信息
   async addNotification(
-    { news_title, news_content, type }: any,
+    { news_title, news_content, type,file_name }: any,
     imageArr: any,
-    fileName: any,
   ) {
     let news = {
       news_title,
       news_content,
       release_time: formatTimestamp() + '',
       type: type,
+      file_name
     };
     try {
       await this.createNewsWithImages(news, imageArr);
@@ -42,34 +43,24 @@ export class HonorService {
   // TODO 创建证书联合创建图片
   async createNewsWithImages(newsData, imageDataList) {
     const honor = this.honorRepository.create(newsData);
-    const images = imageDataList.map((imageData) => {
-      const image = new HonorImage();
-      image.image_path = imageData;
-      // @ts-ignore
-      image.honor = honor;
-      image.delete = 0;
-      image.image_name = imageData
-        .substring(imageData.lastIndexOf('/') + 1, imageData.length)
-        .split('.')[0];
-      return image;
-    });
+    const image = new HonorImage();
+    image.image_path = imageDataList[0].path;
+    // @ts-ignore
+    image.honor = honor;
+    image.delete = 0;
+    image.image_name = newsData.file_name;
 
     await this.honorRepository.save(honor);
-    await this.honorImageRepository.save(images);
+    await this.honorImageRepository.save(image);
     return {
       code: 200,
       message: 'success',
     };
   }
   //TODO 编辑更新证书
-  async updateNotification(
-    newsData: any,
-    imageDataList: string[],
-    oldImages: string[],
-  ) {
+  async updateNotification(newsData: any, imageDataList: any) {
     await this.entityManager.transaction(async (manager) => {
       let honor: Honor;
-      let endImagesArr = [...oldImages, ...imageDataList];
       if (newsData.id) {
         // 如果有新闻ID，则尝试从数据库中获取已存在的新闻对象
         honor = await manager.findOne(Honor, {
@@ -89,23 +80,15 @@ export class HonorService {
         honor = manager.create(Honor, newsData);
       }
       // 创建新的图片对象并关联到新闻对象
-      const images = endImagesArr
-        .filter((img) => img)
-        .map((imageData) => {
-          // console.log("图片地址：",imageData);
-          const image = manager.create(HonorImage, {
-            image_path: imageData,
-            honor: honor,
-            delete: 0,
-            image_name: imageData
-              .substring(imageData.lastIndexOf('/') + 1, imageData.length)
-              .split('.')[0],
-          });
-          return image;
-        });
-
+      // console.log("图片地址：",imageDataList);
+      const image = manager.create(HonorImage, {
+        image_path: imageDataList[0].path,
+        honor: honor,
+        delete: 0,
+        image_name: newsData.file_name,
+      });
       await manager.save(honor);
-      await manager.save(images);
+      await manager.save(image);
     });
 
     return {
@@ -131,7 +114,7 @@ export class HonorService {
         where: type[0] ? { type: In(type) } : {},
       });
       // console.log('获取证书',results);
-      
+
       return {
         list: results,
         count: results.length,
