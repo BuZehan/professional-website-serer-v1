@@ -15,7 +15,7 @@ export class Honor {
   @Column()
   release_time: string;
 
-  @Column()
+  @Column({default:"学生证书"})
   type: string;
 
   @OneToMany(() => HonorImage, honorImage => honorImage.honor, { cascade: true })

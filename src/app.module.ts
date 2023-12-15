@@ -31,7 +31,8 @@ import { HonorModule } from './honor/honor.module';
 import { SwiperModule } from './swiper/swiper.module';
 import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
-
+// 中间件
+import {CorsMiddleware} from './middleware'
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -69,9 +70,9 @@ import { TeacherModule } from './teacher/teacher.module';
   providers: [AppService],
 })
 export class AppModule {
-  //   configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(CorsMiddleware)
-  //     .forRoutes('*'); // 设置需要应用中间件的路由路径，此处为所有路由
-  // }
+    configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorsMiddleware)
+      .forRoutes('*'); // 设置需要应用中间件的路由路径，此处为所有路由
+  }
 }

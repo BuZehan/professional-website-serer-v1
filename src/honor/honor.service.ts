@@ -38,7 +38,11 @@ export class HonorService {
         code: 200,
         msg: '添加成功',
       };
-    } catch (error) {}
+    } catch (error) {
+      return{
+        code:500,error
+      }
+    }
   }
   // TODO 创建证书联合创建图片
   async createNewsWithImages(newsData, imageDataList) {

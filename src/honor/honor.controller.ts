@@ -27,14 +27,14 @@ export class HonorController {
   @Post('add')
   @UseInterceptors(FilesInterceptor('files', 9))
   create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    // console.log(files,body);
+    console.log(files,body);
     let formData = JSON.parse(body.formData);
     let news_title = formData['news_title'];
     let news_content = formData['news_content'];
     let type = formData['type'];
     let file_name = formData['file_name'];
 
-    console.log('表单数据', body, '文件', files);
+    // console.log('表单数据', body, '文件', files);
     let Images = files.map((item) => {
       return {
         path: `${process.env.ADDRESS}honor/${item.filename}`,
