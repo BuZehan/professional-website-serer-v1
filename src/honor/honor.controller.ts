@@ -90,6 +90,12 @@ export class HonorController {
     // console.log('获取证书',query);
     return this.honor.getNotificationList(query);
   }
+  // 获取教师证书
+  @Get('getHonorForTeacher')
+  getNotificationForTeacher(@Query() query) {
+    // console.log('获取证书',query);
+    return this.honor.getNotificationListForTeacher(query);
+  }
   // 删除新闻
   @Post('delHonor')
   delNotification(@Body() body) {

@@ -171,11 +171,11 @@ export class StudentService {
   // 获取新闻数据->后台展示
   async getStuCount() {
     try {
-      let xwdt = await this.studentRepository.count();
+      let stuNum = await this.studentRepository.count();
       return {
         code: 200,
         data: {
-          xwdt,
+          stuNum,
         },
       };
     } catch (error) {

@@ -22,7 +22,7 @@ export class HonorService {
 
   //TODO 添加证书信息
   async addNotification(
-    { news_title, news_content, type,file_name }: any,
+    { news_title, news_content, type, file_name }: any,
     imageArr: any,
   ) {
     let news = {
@@ -30,7 +30,7 @@ export class HonorService {
       news_content,
       release_time: formatTimestamp() + '',
       type: type,
-      file_name
+      file_name,
     };
     try {
       await this.createNewsWithImages(news, imageArr);
@@ -39,9 +39,10 @@ export class HonorService {
         msg: '添加成功',
       };
     } catch (error) {
-      return{
-        code:500,error
-      }
+      return {
+        code: 500,
+        error,
+      };
     }
   }
   // TODO 创建证书联合创建图片
@@ -132,6 +133,35 @@ export class HonorService {
         imgArr: results.honorImage,
       };
     } catch (error) {
+      return {
+        code: 500,
+        message: 'error',
+      };
+    }
+  }
+  //TODO 获取教师证书
+  async getNotificationListForTeacher(pageData: any) {
+    try {
+      let [results, total] = await this.honorRepository.findAndCount({
+        order: {
+          id: 'DESC',
+        },
+        relations: ['honorImage'],
+        where: {
+          type:'教师证书'
+        },
+      });
+      // console.log('获取证书',results);
+      return {
+        list: results,
+        count: results.length,
+        total,
+        // @ts-ignore
+        imgArr: results.honorImage,
+      };
+    } catch (error) {
+      console.log(error);
+      
       return {
         code: 500,
         message: 'error',
