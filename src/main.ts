@@ -28,5 +28,6 @@ async function bootstrap() {
   app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
   app.use(session({ secret: "XiaoBu", name: "xb.session", rolling: true, cookie: { maxAge: null } }))
   await app.listen(3000, process.env.IP);
+  // await app.listen(3000);
 }
 bootstrap();

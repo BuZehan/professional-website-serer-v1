@@ -10,10 +10,12 @@ export class TeacherController {
   @Post('add')
   @UseInterceptors(FilesInterceptor('files', 9))
   create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-    // console.log(files,body);
+    console.log("教师信息：",files,body);
     let formData = JSON.parse(body.formData);
     let teacher_name = formData['teacher_name'];
-    let teacher_desc = formData['teacher_desc'];
+    let teacher_edu_exp = formData['teacher_edu_exp'];
+    let teacher_study_exp = formData['teacher_study_exp'];
+    let teacher_work_exp = formData['teacher_work_exp'];
     let gender = formData['gender'];
     // console.log('表单数据', body, '文件', files);
     let Images = files.map(
@@ -21,7 +23,7 @@ export class TeacherController {
     );
     let fileName = files.map((item) => item.filename);
     return this.teacherService.addTeacher(
-      { teacher_name, teacher_desc, gender },
+      { teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender },
       Images,
       fileName,
     );
@@ -39,7 +41,9 @@ export class TeacherController {
     // console.log('表单数据', body, '文件', files);
     let formData = JSON.parse(body.formData);
     let teacher_name = formData['teacher_name'];
-    let teacher_desc = formData['teacher_desc'];
+    let teacher_edu_exp = formData['teacher_edu_exp'];
+    let teacher_study_exp = formData['teacher_study_exp'];
+    let teacher_work_exp = formData['teacher_work_exp'];
     let gender = formData['gender'];
     let images = formData['images'];
     let id = formData['id'];
@@ -51,7 +55,7 @@ export class TeacherController {
     // 旧图片
     let oldImages = images.map((path) => (path.url ? path.url : path));
     return this.teacherService.updateTeacher(
-      { teacher_name, teacher_desc, images, id,gender },
+      {id, teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender },
       Images,
       oldImages,
     );

@@ -16,16 +16,24 @@ export class TeacherService {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
   ) {}
-
+  // { teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender },
   //TODO 添加教师信息
   async addTeacher(
-    { teacher_name, teacher_desc,gender }: any,
+    {
+      teacher_name,
+      teacher_edu_exp,
+      teacher_work_exp,
+      teacher_study_exp,
+      gender,
+    }: any,
     imageArr: any,
     fileName: any,
   ) {
     let stuInfo = {
       teacher_name,
-      teacher_desc,
+      teacher_edu_exp,
+      teacher_work_exp,
+      teacher_study_exp,
       gender,
       release_time: formatTimestamp() + '',
     };
@@ -44,7 +52,7 @@ export class TeacherService {
       };
     }
   }
-  // TODO 创建学生联合创建图片
+  // TODO 创建teacher联合创建图片
   async createTeachersWithImages(stuInfo, imageDataList) {
     const teacher = this.teacherRepository.create(stuInfo);
     const images = imageDataList.map((imageData) => {
@@ -68,7 +76,7 @@ export class TeacherService {
   }
   //TODO 获取教师信息
   async geTeacherList(pageData: any) {
-    let { page, limit, gender} = pageData;
+    let { page, limit, gender } = pageData;
     // 将 type 转换为数组，如果它不是数组类型
     try {
       if (!Array.isArray(gender)) {
@@ -104,7 +112,7 @@ export class TeacherService {
       };
     }
   }
-  //TODO 更新新闻数据
+  //TODO 更新数据
   async updateTeacher(
     newsData: any,
     imageDataList: string[],
@@ -124,7 +132,7 @@ export class TeacherService {
           throw new Error('News not found');
         }
         // 更新新闻对象的属性
-        
+
         Object.assign(teacher, newsData);
         // 删除已有的图片对象
         await manager.delete(TeacherImage, { teacher: teacher });
@@ -179,9 +187,9 @@ export class TeacherService {
     } catch (error) {
       console.log(error);
       return {
-        code:500,
-        error
-      }
+        code: 500,
+        error,
+      };
     }
   }
   //TODO 获取新闻数据->后台展示
@@ -197,9 +205,9 @@ export class TeacherService {
     } catch (error) {
       console.log(error);
       return {
-        code:500,
-        message:'error'
-      }
+        code: 500,
+        message: 'error',
+      };
     }
   }
 }

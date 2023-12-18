@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import {TeacherImage} from './teacherImage.entity'
+import { formatTimestamp } from 'src/utils';
 
 @Entity()
 export class Teacher {
@@ -10,9 +11,15 @@ export class Teacher {
   teacher_name: string;
 
   @Column({type:'text'})
-  teacher_desc: string; 
+  teacher_edu_exp: string; 
 
-  @Column()
+  @Column({type:'text'})
+  teacher_study_exp: string; 
+
+  @Column({type:'text'})
+  teacher_work_exp: string; 
+
+  @Column({default:formatTimestamp()})
   release_time: string;
 
   @Column()
