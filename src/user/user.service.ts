@@ -107,7 +107,13 @@ function UserRoles(username: string, password: string) {
             icon: 'user',
             url: 'Teacher.vue',
           },
-     
+          // {
+          //   path: 'template',
+          //   name: 'template',
+          //   label: '网站模板管理',
+          //   icon: 'picture',
+          //   url: 'Template.vue',
+          // },
         ],
         message: '获取成功',
       },

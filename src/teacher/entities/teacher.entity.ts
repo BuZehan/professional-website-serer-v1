@@ -22,6 +22,9 @@ export class Teacher {
   @Column({default:formatTimestamp()})
   release_time: string;
 
+  @Column({default:""})
+  teacher_position:string
+
   @Column()
   gender: string;
 

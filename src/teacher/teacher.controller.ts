@@ -16,6 +16,7 @@ export class TeacherController {
     let teacher_edu_exp = formData['teacher_edu_exp'];
     let teacher_study_exp = formData['teacher_study_exp'];
     let teacher_work_exp = formData['teacher_work_exp'];
+    let teacher_position = formData['teacher_position'];
     let gender = formData['gender'];
     // console.log('表单数据', body, '文件', files);
     let Images = files.map(
@@ -23,12 +24,12 @@ export class TeacherController {
     );
     let fileName = files.map((item) => item.filename);
     return this.teacherService.addTeacher(
-      { teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender },
+      { teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender,teacher_position },
       Images,
       fileName,
     );
   }
-  //TODO获取所有新闻
+  //TODO获取所有
   @Get('getTeacher')
   getStu(@Query() query) {
     // console.log('获取证书',query);
@@ -46,6 +47,7 @@ export class TeacherController {
     let teacher_work_exp = formData['teacher_work_exp'];
     let gender = formData['gender'];
     let images = formData['images'];
+    let teacher_position = formData['teacher_position'];
     let id = formData['id'];
     // console.log('前端数据：', { news_title, news_content, images, id },"文件:",files);
     // 新增图片
@@ -55,7 +57,7 @@ export class TeacherController {
     // 旧图片
     let oldImages = images.map((path) => (path.url ? path.url : path));
     return this.teacherService.updateTeacher(
-      {id, teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender },
+      {id, teacher_name,teacher_edu_exp, teacher_work_exp,teacher_study_exp, gender,teacher_position },
       Images,
       oldImages,
     );

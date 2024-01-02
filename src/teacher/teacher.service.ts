@@ -25,6 +25,7 @@ export class TeacherService {
       teacher_work_exp,
       teacher_study_exp,
       gender,
+      teacher_position
     }: any,
     imageArr: any,
     fileName: any,
@@ -35,6 +36,7 @@ export class TeacherService {
       teacher_work_exp,
       teacher_study_exp,
       gender,
+      teacher_position,
       release_time: formatTimestamp() + '',
     };
     try {
@@ -79,17 +81,11 @@ export class TeacherService {
     let { page, limit, gender } = pageData;
     // 将 type 转换为数组，如果它不是数组类型
     try {
-      if (!Array.isArray(gender)) {
-        gender = [gender];
-      }
       let [results, total] = await this.teacherRepository.findAndCount({
-        skip: (page - 1) * limit,
-        take: limit,
         order: {
           id: 'DESC',
         },
         relations: ['teacherImage'],
-        where: gender[0] ? { gender: In(gender) } : {},
       });
       return {
         list: results,

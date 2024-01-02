@@ -19,7 +19,6 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 export class NewsController {
   constructor(
     private readonly newsService: NewsService,
-
   ) {}
   // 上传文件（图片）
   @Post('upload')

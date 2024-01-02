@@ -46,7 +46,6 @@ export class NewsService {
           // 更新新闻对象的属性
           Object.assign(editorData, { title, content, image_list,release_time});
         }
-
         await manager.save(editorData);
       });
 
@@ -74,7 +73,7 @@ export class NewsService {
         .execute();
 
       // 删除指定的新闻数据
-      await this.newsRepository.delete(id);
+      await this.editorDataRepository.delete(id);
       return {
         code: 200,
         message: 'delete success',
@@ -87,7 +86,7 @@ export class NewsService {
   // 获取新闻数据->后台展示
   async getNewsCount() {
     try {
-      let xwdt = await this.newsRepository.count();
+      let xwdt = await this.editorDataRepository.count();
       return {
         code: 200,
         data: {
